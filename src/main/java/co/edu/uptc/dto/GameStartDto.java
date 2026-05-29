@@ -5,9 +5,15 @@ public class GameStartDto {
     private int          speed;
     private GameAreaDto  gameArea;
     private String       courtSide;
-    private CourtZoneDto courtZone;
 
     public GameStartDto() {}
+
+    public GameStartDto(int speed, GameAreaDto gameArea, String courtSide) {
+        this.type      = "GAME_START";
+        this.speed     = speed;
+        this.gameArea  = gameArea;
+        this.courtSide = courtSide;
+    }
 
     public String getType()           { return type; }
     public void setType(String type)  { this.type = type; }
@@ -17,6 +23,4 @@ public class GameStartDto {
     public void setGameArea(GameAreaDto gameArea) { this.gameArea = gameArea; }
     public String getCourtSide()      { return courtSide; }
     public void setCourtSide(String courtSide) { this.courtSide = courtSide; }
-    public CourtZoneDto getCourtZone() { return courtZone; }
-    public void setCourtZone(CourtZoneDto courtZone) { this.courtZone = courtZone; }
 }

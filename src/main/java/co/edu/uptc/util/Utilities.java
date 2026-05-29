@@ -13,13 +13,13 @@ public class Utilities {
     public static final int FRAME_HEIGHT       = GAME_PANEL_HEIGHT + 62;
 
     public static final int COURT_COL_START    = 0;
-    public static final int COURT_COL_END      = 1;
+    public static final int COURT_COL_END      = 0;
     public static final int COURT_ROW_START    = 5;
     public static final int COURT_ROW_END      = 9;
 
     public static final int ATK_SPAWN_COL_START = 23;
     public static final int ATK_SPAWN_COL_END   = 24;
-    public static final int DEF_SPAWN_COL       = 2;
+    public static final int DEF_SPAWN_COL       = 1;
 
     public static final int DEFAULT_PORT        = 8080;
     public static final int DEFAULT_SPEED_MS    = 500;

@@ -14,7 +14,7 @@ import javax.swing.*;
 public class ClientPresenter implements PresenterInterface {
     private ModelInterface model;
     private ViewInterface  view;
-    private Connection connection;
+    private Connection     connection;
     private String         studentCode;
 
     @Override public void setModel(ModelInterface model) { this.model = model; }
@@ -55,7 +55,9 @@ public class ClientPresenter implements PresenterInterface {
             case Protocol.GAME_STATE   -> handleGameState(json);
             case Protocol.SCORE_UPDATE -> handleScoreUpdate(json);
             case Protocol.ROLE_CHANGE  -> handleRoleChange(json);
-            case Protocol.GAME_END     -> handleGameEnd();
+            case Protocol.BLOCK        -> handleBlock(json);
+            case Protocol.PLAYER_DONE  -> handlePlayerDone(json);
+            case Protocol.GAME_END     -> handleGameEnd(json);
         }
     }
 
@@ -116,7 +118,15 @@ public class ClientPresenter implements PresenterInterface {
         }
     }
 
-    private void handleGameEnd() {
+    private void handleBlock(String json) {
+        refreshView();
+    }
+
+    private void handlePlayerDone(String json) {
+        refreshView();
+    }
+
+    private void handleGameEnd(String json) {
         model.setGameStarted(false);
         refreshView();
     }
