@@ -123,7 +123,7 @@ public class GamePanel extends JPanel {
         g.fillRoundRect(px, py, size, size, 8, 8);
         g.setColor(color.darker());
         g.drawRoundRect(px, py, size, size, 8, 8);
-        drawPlayerLabel(g, p.getCode(), px, py, size);
+        drawPlayerLabel(g, p.getStudentCode(), px, py, size);
     }
 
     private void drawPlayerLabel(Graphics2D g, String code, int px, int py, int size) {
