@@ -1,21 +1,24 @@
 package co.edu.uptc.dto;
 
 public class ConnectAckDto {
-    private String  type;
+    private String type;
     private boolean accepted;
-    private String  message;
-    private String  gameStatus;
+    private String message;
+    private String gameStatus;
 
-    public ConnectAckDto() {}
-    public ConnectAckDto(boolean accepted, String message) {
-        this.type     = "CONNECT_ACK";
-        this.accepted = accepted;
-        this.message  = message;
+    public ConnectAckDto() {
     }
+
+    public ConnectAckDto(boolean accepted, String message) {
+        this.type = "CONNECT_ACK";
+        this.accepted = accepted;
+        this.message = message;
+    }
+
     public ConnectAckDto(boolean accepted, String message, String gameStatus) {
-        this.type       = "CONNECT_ACK";
-        this.accepted   = accepted;
-        this.message    = message;
+        this.type = "CONNECT_ACK";
+        this.accepted = accepted;
+        this.message = message;
         this.gameStatus = gameStatus;
     }
 

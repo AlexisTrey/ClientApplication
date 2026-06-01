@@ -8,7 +8,8 @@ public class MessageParser {
 
     private static final Gson GSON = new Gson();
 
-    private MessageParser() {}
+    private MessageParser() {
+    }
 
     public static String toJson(Object obj) {
         return GSON.toJson(obj);

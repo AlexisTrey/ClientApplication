@@ -8,9 +8,10 @@ import javax.swing.*;
 public class ThemeManager {
 
     public static final String LIGHT = "light";
-    public static final String DARK  = "dark";
+    public static final String DARK = "dark";
 
-    private ThemeManager() {}
+    private ThemeManager() {
+    }
 
     public static void applyByKey(String key) {
         try {

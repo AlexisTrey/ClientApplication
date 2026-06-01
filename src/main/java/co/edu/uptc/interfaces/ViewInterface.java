@@ -14,5 +14,7 @@ public interface ViewInterface {
     void showConnectSuccess(String message);
     void updateGameState(List<PlayerDto> players);
     void updateMyInfo(int score, String role);
+    void setGameStatus(String status);
+    void showLeaveButton();
 
 }

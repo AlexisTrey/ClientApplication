@@ -1,6 +1,7 @@
 package co.edu.uptc.view;
 
 import co.edu.uptc.components.fonts.AppFonts;
+import co.edu.uptc.interfaces.PresenterInterface;
 import co.edu.uptc.util.Utilities;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class InfoPanel extends JPanel {
                 Utilities.GAME_PANEL_HEIGHT));
         setBorder(BorderFactory.createTitledBorder("Mi Información"));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         addPlayerSection();
         addHorizontalSeparator();
         addScoreSection();
@@ -43,9 +45,10 @@ public class InfoPanel extends JPanel {
     }
 
     private void addStatusSection() {
-        add(buildRow(createLabel("Estado:", AppFonts.BODY_BOLD)));
-        lblStatus = new JLabel("Conectado");
+        add(buildRow(createLabel("ESTADO:", AppFonts.BODY_BOLD)));
+        lblStatus = new JLabel("Desconectado");
         lblStatus.setFont(AppFonts.BODY);
+        lblStatus.setAlignmentX(CENTER_ALIGNMENT);
         add(buildRow(lblStatus));
     }
 
@@ -57,8 +60,21 @@ public class InfoPanel extends JPanel {
         }
     }
 
-    public void setStatus(String message) {
-        lblStatus.setText(message);
+    public void setGameStatus(String status) {
+        String label = switch (status) {
+            case "WAITING" -> "Esperando partida";
+            case "IN_GAME" -> "En juego";
+            case "CLOSED" -> "Partida finalizada";
+            default -> status;
+        };
+        Color color = switch (status) {
+            case "WAITING" -> new Color(200, 130, 0);
+            case "IN_GAME" -> new Color(0, 140, 0);
+            case "CLOSED" -> new Color(160, 0, 0);
+            default -> Color.GRAY;
+        };
+        lblStatus.setText(label);
+        lblStatus.setForeground(color);
     }
 
     private Color roleColor(String role) {
@@ -87,4 +103,5 @@ public class InfoPanel extends JPanel {
         lbl.setFont(font);
         return lbl;
     }
+
 }

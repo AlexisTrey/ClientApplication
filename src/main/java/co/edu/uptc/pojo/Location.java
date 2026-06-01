@@ -5,21 +5,34 @@ public class Location {
     private int col;
     private int row;
 
-    public Location() {}
+    public Location() {
+    }
 
     public Location(int col, int row) {
         this.col = col;
         this.row = row;
     }
 
-    public int getCol() { return col; }
-    public void setCol(int col) { this.col = col; }
-    public int getRow() { return row; }
-    public void setRow(int row) { this.row = row; }
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Location other)) return false;
+        if (!(o instanceof Location other))
+            return false;
         return col == other.col && row == other.row;
     }
 

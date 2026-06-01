@@ -1,5 +1,5 @@
 package co.edu.uptc.pojo;
 
-public enum Direction {
+public enum Movement {
     UP, DOWN, LEFT, RIGHT
 }

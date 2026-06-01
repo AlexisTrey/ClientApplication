@@ -1,5 +1,7 @@
 package co.edu.uptc.network.protocol;
 
+import co.edu.uptc.pojo.GameOverReason;
+
 public class Protocol {
 
     public static final String CONNECT      = "CONNECT";
@@ -15,8 +17,8 @@ public class Protocol {
     public static final String GAME_END     = "GAME_END";
     public static final String DISCONNECT   = "DISCONNECT";
 
-    public static final String REASON_SERVER_DECISION = "SERVER_DECISION";
-    public static final String REASON_ALL_DONE        = "ALL_DONE";
+    public static final String REASON_SERVER_DECISION = GameOverReason.SERVER_DECISION.name();
+    public static final String REASON_ALL_DONE        = GameOverReason.ALL_DONE.name();
 
     public static final String COURT_SIDE_LEFT  = "LEFT";
     public static final String COURT_SIDE_RIGHT = "RIGHT";

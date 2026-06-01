@@ -2,19 +2,19 @@ package co.edu.uptc.pojo;
 
 public class Player {
     private String studentCode;
-    private int    shortId;
+    private int shortId;
     private Location location;
-    private Role   role;
-    private int    score;
-    private int    progressCount;
+    private Role role;
+    private int score;
+    private int progressCount;
 
     public Player() {
     }
 
     public Player(String studentCode, int shortId) {
-        this.studentCode   = studentCode;
-        this.shortId       = shortId;
-        this.score         = 0;
+        this.studentCode = studentCode;
+        this.shortId = shortId;
+        this.score = 0;
         this.progressCount = 0;
     }
 

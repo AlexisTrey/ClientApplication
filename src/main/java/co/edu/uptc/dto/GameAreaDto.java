@@ -5,7 +5,8 @@ public class GameAreaDto {
     private int height;
     private int heightCourt;
 
-    public GameAreaDto() {}
+    public GameAreaDto() {
+    }
 
     public GameAreaDto(int width, int height, int heightCourt) {
         this.width = width;
@@ -13,16 +14,27 @@ public class GameAreaDto {
         this.heightCourt = heightCourt;
     }
 
-    public int getWidth()  { return width; }
-    public void setWidth(int width) { this.width = width; }
-    public int getHeight() { return height; }
-    public void setHeight(int height) { this.height = height; }
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
     public int getHeightCourt() {
         return heightCourt;
     }
 
-    public void setHeightCourt(int heightCourt) {
-        this.heightCourt = heightCourt;
+    public void setHeightCourt(int h) {
+        this.heightCourt = h;
     }
 }

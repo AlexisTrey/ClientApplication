@@ -11,7 +11,7 @@ public class ServerListener implements Runnable {
     private final PresenterInterface presenter;
 
     public ServerListener(BufferedReader reader, PresenterInterface presenter) {
-        this.reader    = reader;
+        this.reader = reader;
         this.presenter = presenter;
     }
 

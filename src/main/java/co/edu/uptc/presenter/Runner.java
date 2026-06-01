@@ -18,9 +18,9 @@ public class Runner {
     }
 
     private void makeMvp() {
-        model     = new ClientModel();
+        model = new ClientModel();
         presenter = new ClientPresenter();
-        view      = ClientFrame.getInstance();
+        view = ClientFrame.getInstance();
         presenter.setModel(model);
         presenter.setView(view);
         view.setPresenter(presenter);

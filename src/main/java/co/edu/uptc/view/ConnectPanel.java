@@ -13,9 +13,9 @@ public class ConnectPanel extends JPanel {
 
     private PresenterInterface presenter;
     private CustomInput inputHost;
-    private CustomInput        inputPort;
-    private CustomInput        inputCode;
-    private JLabel             lblStatus;
+    private CustomInput inputPort;
+    private CustomInput inputCode;
+    private JLabel lblStatus;
     private CustomButton btnConnect;
 
     public ConnectPanel() {
@@ -48,8 +48,8 @@ public class ConnectPanel extends JPanel {
 
     private JPanel buildForm() {
         JPanel form = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 4));
-        inputHost = new CustomInput("IP (defecto 127.0.0.1):", 320, 180);
-        inputPort = new CustomInput("Puerto (defecto 8080):", 320, 80);
+        inputHost = new CustomInput("IP:", 320, 180);
+        inputPort = new CustomInput("Puerto:", 320, 80);
         inputCode = new CustomInput("Código estudiantil:", 320, 180);
         form.add(inputHost);
         form.add(inputPort);
@@ -68,19 +68,20 @@ public class ConnectPanel extends JPanel {
 
     private JPanel buildStatusRow() {
         JPanel row = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        lblStatus  = new JLabel(" ");
+        lblStatus = new JLabel(" ");
         lblStatus.setFont(AppFonts.BODY);
         row.add(lblStatus);
         return row;
     }
 
     private void handleConnect() {
-        if (!validateFields()) return;
+        if (!validateFields())
+            return;
         btnConnect.setEnabled(false);
         lblStatus.setForeground(new Color(0, 120, 0));
         lblStatus.setText("Conectando...");
         String host = parseHost();
-        int    port = parsePort();
+        int port = parsePort();
         String code = inputCode.getValue();
         presenter.onConnect(host, port, code);
     }

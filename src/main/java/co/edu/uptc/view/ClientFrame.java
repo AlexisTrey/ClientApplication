@@ -3,7 +3,7 @@ package co.edu.uptc.view;
 import co.edu.uptc.dto.PlayerDto;
 import co.edu.uptc.interfaces.PresenterInterface;
 import co.edu.uptc.interfaces.ViewInterface;
-import co.edu.uptc.pojo.Direction;
+import co.edu.uptc.pojo.Movement;
 import co.edu.uptc.util.ThemeManager;
 import co.edu.uptc.util.Utilities;
 
@@ -25,6 +25,7 @@ public class ClientFrame extends JFrame implements ViewInterface {
     private GamePanel gamePanel;
     private InfoPanel infoPanel;
     private boolean gameActive;
+    private JButton btnLeave;
 
     private ClientFrame() {
         initFrame();
@@ -33,7 +34,8 @@ public class ClientFrame extends JFrame implements ViewInterface {
     }
 
     public static ClientFrame getInstance() {
-        if (instance == null) instance = new ClientFrame();
+        if (instance == null)
+            instance = new ClientFrame();
         return instance;
     }
 
@@ -62,10 +64,34 @@ public class ClientFrame extends JFrame implements ViewInterface {
 
     private JPanel buildGameCard() {
         JPanel gameCard = new JPanel(new BorderLayout());
+
         gamePanel = new GamePanel();
         infoPanel = new InfoPanel();
+
         gameCard.add(gamePanel, BorderLayout.CENTER);
-        gameCard.add(infoPanel, BorderLayout.EAST);
+
+        JPanel rightPanel = new JPanel(new BorderLayout());
+
+        rightPanel.add(infoPanel, BorderLayout.CENTER);
+
+        btnLeave = new JButton("Salir de la partida");
+        btnLeave.setVisible(false);
+        btnLeave.setPreferredSize(new Dimension(
+                Utilities.INFO_PANEL_WIDTH - 20, 40));
+
+        btnLeave.addActionListener(e -> {
+            if (presenter != null) {
+                presenter.onLeaveGame();
+            }
+        });
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(btnLeave);
+
+        rightPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        gameCard.add(rightPanel, BorderLayout.EAST);
+
         return gameCard;
     }
 
@@ -79,12 +105,13 @@ public class ClientFrame extends JFrame implements ViewInterface {
     }
 
     private void handleKeyPress(int keyCode) {
-        if (presenter == null) return;
+        if (presenter == null)
+            return;
         switch (keyCode) {
-            case KeyEvent.VK_UP -> presenter.onMove(Direction.UP);
-            case KeyEvent.VK_DOWN -> presenter.onMove(Direction.DOWN);
-            case KeyEvent.VK_LEFT -> presenter.onMove(Direction.LEFT);
-            case KeyEvent.VK_RIGHT -> presenter.onMove(Direction.RIGHT);
+            case KeyEvent.VK_UP -> presenter.onMove(Movement.UP);
+            case KeyEvent.VK_DOWN -> presenter.onMove(Movement.DOWN);
+            case KeyEvent.VK_LEFT -> presenter.onMove(Movement.LEFT);
+            case KeyEvent.VK_RIGHT -> presenter.onMove(Movement.RIGHT);
         }
     }
 
@@ -126,6 +153,10 @@ public class ClientFrame extends JFrame implements ViewInterface {
     public void showGameView() {
         gameActive = true;
         cardLayout.show(cardPanel, CARD_GAME);
+        SwingUtilities.invokeLater(() -> {
+            gamePanel.setFocusable(true);
+            gamePanel.requestFocusInWindow();
+        });
     }
 
     @Override
@@ -147,4 +178,31 @@ public class ClientFrame extends JFrame implements ViewInterface {
     public void updateMyInfo(int score, String role) {
         infoPanel.updateMyInfo(score, role);
     }
+
+    @Override
+    public void setGameStatus(String status) {
+        SwingUtilities.invokeLater(() -> {
+            infoPanel.setGameStatus(status);
+            gamePanel.repaint();
+            if ("CLOSED".equals(status)) {
+                gameActive = false;
+                JOptionPane.showMessageDialog(
+                        this,
+                        "La partida ha finalizado.",
+                        "Partida terminada",
+                        JOptionPane.INFORMATION_MESSAGE);
+                cardLayout.show(cardPanel, CARD_CONNECT);
+                connectPanel.showError(
+                        "Partida finalizada. Puedes cerrar la aplicación.");
+            }
+        });
+    }
+
+    @Override
+    public void showLeaveButton() {
+        btnLeave.setVisible(true);
+        btnLeave.getParent().revalidate();
+        btnLeave.getParent().repaint();
+    }
+
 }

@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class AppConfig {
     private static final String CONFIG_FILE = "config.properties";
-    private static final Properties props   = new Properties();
+    private static final Properties props = new Properties();
 
     static {
         loadProperties();
@@ -17,7 +17,8 @@ public class AppConfig {
     private static void loadProperties() {
         try (InputStream in = AppConfig.class
                 .getClassLoader().getResourceAsStream(CONFIG_FILE)) {
-            if (in != null) props.load(in);
+            if (in != null)
+                props.load(in);
         } catch (IOException e) {
             System.err.println("Could not load config.properties, using defaults.");
         }
@@ -33,5 +34,6 @@ public class AppConfig {
                         String.valueOf(Utilities.DEFAULT_PORT)));
     }
 
-    private AppConfig() {}
+    private AppConfig() {
+    }
 }

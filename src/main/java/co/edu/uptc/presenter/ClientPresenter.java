@@ -7,23 +7,30 @@ import co.edu.uptc.interfaces.ViewInterface;
 import co.edu.uptc.network.client.Connection;
 import co.edu.uptc.network.protocol.MessageParser;
 import co.edu.uptc.network.protocol.Protocol;
-import co.edu.uptc.pojo.Direction;
+import co.edu.uptc.pojo.Movement;
 
 import javax.swing.*;
 
 public class ClientPresenter implements PresenterInterface {
     private ModelInterface model;
-    private ViewInterface  view;
-    private Connection     connection;
-    private String         studentCode;
+    private ViewInterface view;
+    private Connection connection;
+    private String studentCode;
 
-    @Override public void setModel(ModelInterface model) { this.model = model; }
-    @Override public void setView(ViewInterface view)    { this.view  = view;  }
+    @Override
+    public void setModel(ModelInterface model) {
+        this.model = model;
+    }
+
+    @Override
+    public void setView(ViewInterface view) {
+        this.view = view;
+    }
 
     @Override
     public void onConnect(String host, int port, String studentCode) {
         this.studentCode = studentCode;
-        this.connection  = new Connection(this);
+        this.connection = new Connection(this);
         boolean ok = connection.connect(host, port, studentCode);
         if (!ok) {
             view.showConnectError("No se pudo conectar a " + host + ":" + port);
@@ -32,16 +39,21 @@ public class ClientPresenter implements PresenterInterface {
 
     @Override
     public void onDisconnect() {
-        if (connection != null) connection.disconnect();
-        SwingUtilities.invokeLater(() ->
-                view.showConnectError("Conexión perdida con el servidor"));
+        if (connection != null)
+            connection.disconnect();
+        SwingUtilities.invokeLater(() -> {
+            model.setGameStatus("CLOSED");
+            view.setGameStatus("CLOSED");
+            view.showConnectError("Conexión perdida con el servidor");
+        });
     }
 
     @Override
-    public void onMove(Direction direction) {
-        if (connection == null || !model.isGameStarted()) return;
+    public void onMove(Movement movement) {
+        if (connection == null || !model.isGameStarted())
+            return;
         String json = MessageParser.toJson(
-                new MoveDto(studentCode, direction.name()));
+                new MoveDto(studentCode, movement.name()));
         connection.send(json);
     }
 
@@ -49,15 +61,15 @@ public class ClientPresenter implements PresenterInterface {
     public void onMessageReceived(String json) {
         String type = MessageParser.getType(json);
         switch (type) {
-            case Protocol.CONNECT_ACK  -> handleConnectAck(json);
-            case Protocol.GAME_START   -> handleGameStart(json);
-            case Protocol.ROLE_ASSIGN  -> handleRoleAssign(json);
-            case Protocol.GAME_STATE   -> handleGameState(json);
+            case Protocol.CONNECT_ACK -> handleConnectAck(json);
+            case Protocol.GAME_START -> handleGameStart(json);
+            case Protocol.ROLE_ASSIGN -> handleRoleAssign(json);
+            case Protocol.GAME_STATE -> handleGameState(json);
             case Protocol.SCORE_UPDATE -> handleScoreUpdate(json);
-            case Protocol.ROLE_CHANGE  -> handleRoleChange(json);
-            case Protocol.BLOCK        -> handleBlock(json);
-            case Protocol.PLAYER_DONE  -> handlePlayerDone(json);
-            case Protocol.GAME_END     -> handleGameEnd(json);
+            case Protocol.ROLE_CHANGE -> handleRoleChange(json);
+            case Protocol.BLOCK -> handleBlock(json);
+            case Protocol.PLAYER_DONE -> handlePlayerDone(json);
+            case Protocol.GAME_END -> handleGameEnd(json);
         }
     }
 
@@ -75,6 +87,8 @@ public class ClientPresenter implements PresenterInterface {
         SwingUtilities.invokeLater(() -> {
             if (dto.isAccepted()) {
                 model.setMyCode(studentCode);
+                model.setGameStatus("WAITING");
+                view.setGameStatus("WAITING");
                 view.showConnectSuccess("Conectado. Esperando inicio de partida...");
             } else {
                 view.showConnectError("Rechazado: " + dto.getMessage());
@@ -84,19 +98,25 @@ public class ClientPresenter implements PresenterInterface {
 
     private void handleGameStart(String json) {
         model.setGameStarted(true);
-        SwingUtilities.invokeLater(() -> view.showGameView());
+        model.setGameStatus("IN_GAME");
+        SwingUtilities.invokeLater(() -> {
+            view.setGameStatus("IN_GAME");
+            view.showGameView();
+            view.showLeaveButton();
+        });
     }
 
     private void handleRoleAssign(String json) {
         RoleAssignDto dto = MessageParser.fromJson(json, RoleAssignDto.class);
         model.setMyRole(dto.getRole(),
-                dto.getPosition().getX(), dto.getPosition().getY());
+                dto.getPosition().getX(),
+                dto.getPosition().getY());
         refreshView();
     }
 
     private void handleGameState(String json) {
         GameStateDto dto = MessageParser.fromJson(json, GameStateDto.class);
-        model.updateGameState(dto.getPlayers());
+        model.updateGameState(dto.getPlayersList());
         refreshView();
     }
 
@@ -113,7 +133,8 @@ public class ClientPresenter implements PresenterInterface {
         RoleChangeDto dto = MessageParser.fromJson(json, RoleChangeDto.class);
         if (studentCode.equals(dto.getStudentCode())) {
             model.setMyRole(dto.getNewRole(),
-                    dto.getNewPosition().getX(), dto.getNewPosition().getY());
+                    dto.getNewPosition().getX(),
+                    dto.getNewPosition().getY());
             refreshView();
         }
     }
@@ -127,7 +148,27 @@ public class ClientPresenter implements PresenterInterface {
     }
 
     private void handleGameEnd(String json) {
+        GameEndDto dto = MessageParser.fromJson(json, GameEndDto.class);
         model.setGameStarted(false);
+        model.setGameStatus("CLOSED");
+        SwingUtilities.invokeLater(() -> {
+            view.setGameStatus("CLOSED");
+            view.showConnectError("Partida finalizada: " + dto.getReason());
+        });
         refreshView();
+    }
+
+    @Override
+    public void onLeaveGame() {
+
+        if (connection != null) {
+            connection.disconnect();
+        }
+
+        model.setGameStarted(false);
+
+        SwingUtilities.invokeLater(() -> {
+            view.setGameStatus("CLOSED");
+        });
     }
 }

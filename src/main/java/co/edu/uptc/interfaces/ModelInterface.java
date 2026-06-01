@@ -16,5 +16,7 @@ public interface ModelInterface {
     void setGameStarted(boolean started);
     String getMyCode();
     void setMyCode(String code);
+    void setGameStatus(String status);
+    String getGameStatus();
 
 }

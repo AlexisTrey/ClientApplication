@@ -14,7 +14,7 @@ public class Connection {
     private Socket socket;
     private PrintWriter writer;
     private PresenterInterface presenter;
-    private String             studentCode;
+    private String studentCode;
 
     public Connection(PresenterInterface presenter) {
         this.presenter = presenter;
@@ -26,7 +26,8 @@ public class Connection {
             socket = new Socket(host, port);
             writer = new PrintWriter(
                     new OutputStreamWriter(
-                            socket.getOutputStream(), StandardCharsets.UTF_8), true);
+                            socket.getOutputStream(), StandardCharsets.UTF_8),
+                    true);
             startListener();
             send(MessageParser.toJson(new ConnectDto(studentCode)));
             return true;
@@ -36,7 +37,8 @@ public class Connection {
     }
 
     public void send(String json) {
-        if (writer != null) writer.println(json);
+        if (writer != null)
+            writer.println(json);
     }
 
     public void disconnect() {
@@ -55,7 +57,10 @@ public class Connection {
     }
 
     private void closeSocket() {
-        try { if (socket != null) socket.close(); }
-        catch (IOException ignored) {}
+        try {
+            if (socket != null)
+                socket.close();
+        } catch (IOException ignored) {
+        }
     }
 }

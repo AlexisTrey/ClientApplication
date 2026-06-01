@@ -8,12 +8,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class ClientModel implements ModelInterface {
-    private final List<PlayerDto> players =
-            Collections.synchronizedList(new ArrayList<>());
-    private String  myCode;
-    private String  myRole;
-    private int     myScore;
+    private final List<PlayerDto> players = Collections.synchronizedList(new ArrayList<>());
+    private String myCode;
+    private String myRole;
+    private int myScore;
     private boolean gameStarted;
+    private String gameStatus = "WAITING";
 
     @Override
     public void updateGameState(List<PlayerDto> incoming) {
@@ -39,20 +39,42 @@ public class ClientModel implements ModelInterface {
     }
 
     @Override
-    public String getMyRole() { return myRole; }
+    public String getMyRole() {
+        return myRole;
+    }
 
     @Override
-    public int getMyScore()   { return myScore; }
+    public int getMyScore() {
+        return myScore;
+    }
 
     @Override
-    public boolean isGameStarted() { return gameStarted; }
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
 
     @Override
-    public void setGameStarted(boolean started) { this.gameStarted = started; }
+    public void setGameStarted(boolean started) {
+        this.gameStarted = started;
+    }
 
     @Override
-    public String getMyCode() { return myCode; }
+    public String getMyCode() {
+        return myCode;
+    }
 
     @Override
-    public void setMyCode(String code) { this.myCode = code; }
+    public void setMyCode(String code) {
+        this.myCode = code;
+    }
+
+    @Override
+    public void setGameStatus(String status) {
+        this.gameStatus = status;
+    }
+
+    @Override
+    public String getGameStatus() {
+        return gameStatus;
+    }
 }
